@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册</title>
+    <link rel="stylesheet" href="/stylesheets/reg.css">
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <link rel="icon" href="/images/mi.png">
+    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/iview/dist/iview.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="banner">
+        <div class="box">
+            <p class="h2">欢迎,注册</p>
+            <div id="app">
+                <i-input class="Input" placeholder='请输入用户名' v-model='userName'></i-input>
+                <i-input class="Input" placeholder='请输入手机号' v-model='phone'></i-input>
+                <i-input class="Input" placeholder='请输入邮箱' v-model='email'></i-input>
+                <i-input class="Input" placeholder='请输入密码' v-model='password' type='password'></i-input>
+                <i-input class="Input" placeholder='请确认密码' v-model='confirmPwd' type='password'></i-input>
+                <i-button type='warning' class="reg" @click='reg'>注册</i-button>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        // import api from '../utils/api'
+        new Vue({
+            el: '#app',
+            data: {
+                userName: '',
+                phone: '',
+                confirmPwd: '',
+                email: '',
+                password: ''
+            },
+            methods: {
+                reg: function () {
+                    if (!this.check()) return false
+                    let data = {
+                        name: this.userName,
+                        phone: this.phone,
+                        email: this.email,
+                        password: this.password
+                    }
+                    let _this = this
+                    $.ajax({
+                        type: 'post',
+                        url: 'http://localhost:3000/users/reg',
+                        data,
+                        success: function (res) {
+                            console.log(res);
+                            if (0 === res.status) {
+                                _this.$Notice.success({
+                                    desc: '注册成功.'
+                                })
+                           let cc = setTimeout(()=>{
+                                window.location.href='/'
+                             },200)   
+                                return false
+                            } 
+                            if(5==res.status){
+                                _this.$Notice.warning({
+                                    desc: '该手机号已经被注册了.'
+                                })
+                                return false 
+                            }
+                            
+                            else {
+                                _this.$Notice.warning({
+                                    desc: '注册失败.'
+                                })
+                                return false
+                            }
+                        },
+                        error: function () {
+                            console.log('error');
+                        }
+                    }) 
+                },
+                check() {
+                    var re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+                    if (!this.userName) {
+                        this.$Notice.warning({
+                            desc: '请输入用户名.'
+                        })
+                        return false
+                    } else if (!this.phone) {
+                        this.$Notice.warning({
+                            desc: '请输入手机号.'
+                        })
+                        return false
+                    } else if (this.phone.length != 11 || !(/^1[34578]\d{9}$/.test(this.phone))) {
+                        this.$Notice.warning({
+                            desc: '请输入有效的手机号.'
+                        })
+                        return false
+                    } else if (!this.email) {
+                        this.$Notice.warning({
+                            desc: '请输入邮箱.'
+                        })
+                        return false
+                    } else if (!re.test(this.email)) {
+                        this.$Notice.warning({
+                            desc: '请输入有效的邮箱.'
+                        })
+                        return false
+                    } else if (!this.password) {
+                        this.$Notice.warning({
+                            desc: '请输入密码.'
+                        })
+                        return false
+                    } else if (!this.confirmPwd) {
+                        this.$Notice.warning({
+                            desc: '请确认密码.'
+                        })
+                        return false
+                    } else if (this.password != this.confirmPwd) {
+                        this.$Notice.warning({
+                            desc: '两次密码不一致,请从新输入.'
+                        })
+                        return false
+                    }
+
+                    return true
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

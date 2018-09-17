@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <link rel="stylesheet" href="/stylesheets/index.css">
+    <link rel="icon" href="/images/mi.png">
+    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/iview/dist/iview.min.js"></script>
+</head>
+
+<body>
+    <div class="banner">
+        <div id="app">
+            <i-button @click="show" type='primary'>Click me!</i-button>
+            <!-- <Modal v-model="visible" title="对话框">哈哈</Modal> -->
+            <Drawer title="隐藏的内容" :closable="false" v-model="visible">
+                    <p>个人中心</p>
+                    <p>阅读</p>
+                    <p>访客</p>
+            </Drawer>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                visible: false
+            },
+            methods: {
+                show: function () {
+                    this.visible = true;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

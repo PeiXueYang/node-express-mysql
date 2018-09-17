@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>add</title>
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <link rel="stylesheet" href="/stylesheets/add.css">
+    <link rel="icon" href="/images/mi.png">
+    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/iview/dist/iview.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="banner">
+        <div id="app">
+            <div class="block">
+                <i-button type='primary' @click='add'>添加</i-button>
+                <i-input class="input"></i-input>
+            </div>
+            <div class="block">
+                <i-button type='primary'>删除</i-button>
+                <i-input class="input"></i-input>
+            </div>
+            <div class="block">
+                <i-button type='primary'>查找</i-button>
+                <i-input class="input"></i-input>
+            </div>
+            <div class="block">
+                <i-button type='primary'>修改</i-button>
+                <i-input class="input"></i-input>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                visible: false
+            },
+            methods: {
+                show: function () {
+                    this.visible = true;
+                },
+                add(){
+                    let data = {
+                        name:'可可',
+                        age:18,
+                        phone:15563220000,
+                        country:'HK'
+                    }
+                  $.ajax({
+                    type: 'post',
+                    url: 'http://localhost:3000/users/add',
+                    data,
+                    success:(res)=>{
+                         console.log(res)
+                    }
+                  })
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>
