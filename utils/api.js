@@ -10,6 +10,16 @@ export default {
             },
             body: JSON.stringify(params)
         })
+    },
+    Login(params){
+        return fetch(apis.loginUrl, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(params)
+        })
     }
 
 

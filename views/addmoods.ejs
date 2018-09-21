@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>addmoods</title>
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <link rel="stylesheet" href="/css/commonse.css"">
+    <link rel=" stylesheet" href="/stylesheets/add.css">
+    <link rel="icon" href="/images/mi.png">
+    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/iview/dist/iview.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
+</head>
+
+<body>
+    <div class="banner" id="app">
+        <div class="input-fa">
+            <i-input placeholder="请输入心情标题" style="width:80%;" v-model='header' />
+        </div>
+        <div class="put-fa">
+            <i-input placeholder="请输入作者" style="width:80%;" v-model='author' />
+        </div>
+        <div class="fa-editor">
+            <div id="editor" v-model='content'></div>
+        </div>
+        <div>
+            <i-button type='primary' class="fb-mood btn" @click='add'>发表心情</i-button>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                visible: false,
+                content: '',
+                header: '',
+                author: '',
+                editor: ''
+            },
+            mounted() {
+                this.initEditor()
+            },
+            create() {
+
+            },
+            methods: {
+                initEditor() {
+                    var E = window.wangEditor
+                    this.editor = new E('#editor')
+                    this.editor.customConfig.uploadImgShowBase64 = true
+                    this.editor.create()
+                },
+                getTimers() {
+                    let date = new Date()
+                    let year = date.getFullYear()
+                    let month = date.getMonth() + 1
+                    let day = date.getDate()
+                    let hour = date.getHours()
+                    day = day > 10 ? day : '0' + day
+                    month = month > 10 ? month : '0' + month
+                    let min = date.getMinutes()
+                    let sec = date.getSeconds()
+                    min = min > 10 ? min : '0' + min
+                    sec = sec > 10 ? sec : '0' + sec
+                    let timer = year + '/' + month + '/' + day + ' ' + hour + ':' + min + ':' + sec
+                    return timer
+                },
+                checked() {
+                    if (!this.header) {
+                        this.$Notice.warning({
+                            desc: '请输入标题.'
+                        })
+                        return false
+
+                    } else if (!this.author) {
+                        this.$Notice.warning({
+                            desc: '请输入作者.'
+                        })
+                        return false
+                    }
+                    return true
+                },
+                add() {
+                    if (!this.checked()) return false
+                    let data = {
+                        author: this.author,
+                        content: this.editor.txt.text(),
+                        header: this.header,
+                        timer: this.getTimers()
+                    }
+                    // console.log(data)
+                    let _this = this
+                    $.ajax({
+                        type: 'post',
+                        url: 'http://localhost:3000/am/addmoods',
+                        data,
+                        success: (res) => {
+                            console.log(res)
+                            if (0 == res.status) {
+                                _this.$Notice.warning({
+                                    desc: '发表成功.'
+                                })
+                                setTimeout(() => {
+                                    $(window.parent.document).find('#contentIframe').attr(
+                                        'src', 'mood')
+                                }, 1000)
+                                return false
+                            }else{
+                                _this.$Notice.warning({
+                                    desc: '发表失败.'
+                                })
+
+                                return false
+                            }
+                        }
+                    })
+
+                },
+            }
+        })
+    </script>
+    <script type="text/javascript">
+
+    </script>
+</body>
+
+</html>

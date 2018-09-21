@@ -6,6 +6,8 @@ var logger = require('morgan');
 const mysql = require('mysql')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var contentRouter = require('./routes/content')
+var moodsRouter = require('./routes/moods')
 var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,14 +28,17 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));//这里的/ 就 代表着 public
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/ss',contentRouter)
+app.use('/am',moodsRouter)
 app.use('/login',indexRouter);
 app.use('/reg',indexRouter);
-app.use('/add',indexRouter);
 app.use('/login',indexRouter);
 app.use('/main',indexRouter);
 app.use('/mood',indexRouter);
-app.use('/sanwen',indexRouter);
+app.use('/photo',indexRouter);
 app.use('/shuoshuo',indexRouter);
+app.use('/addshuoshuo',indexRouter);
+app.use('/addmoods',indexRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

@@ -118,20 +118,22 @@
                             <i class="fa fa-globe"></i> <span>说说</span>
                         </a>
                     </li>
-
                     <li class="sanwen">
                         <a href="#">
-                            <i class="fa fa-glass"></i> <span>散文</span>
+                            <i class="fa fa-picture-o"></i> <span>照片墙</span>
                         </a>
                     </li>
-
+                    <li class="sanwen">
+                        <a href="#">
+                            <i class="fa fa-camera"></i> <span>时间轴</span>
+                        </a>
+                    </li>
                 </ul>
             </section>
             <!-- /.sidebar -->
         </aside>
 
         <aside class="right-side">
-
             <iframe src="main" frameborder="0" id="contentIframe"></iframe>
         </aside>
     </div>
@@ -153,7 +155,7 @@
                 $(window.parent.document).find('#contentIframe').attr('src', 'mood')
             })
             $('.sanwen').on('click', function () {
-                $(window.parent.document).find('#contentIframe').attr('src', 'sanwen')
+                $(window.parent.document).find('#contentIframe').attr('src', 'photo')
             })
             $('.shuoshuo').on('click', function () {
                 $(window.parent.document).find('#contentIframe').attr('src', 'shuoshuo')

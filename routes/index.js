@@ -12,19 +12,22 @@ router.get('/login',(req,res)=>{
 router.get('/reg',(req,res)=>{
   res.render('reg',{title:"reg 注册页"})
 })
-router.get('/add',(req,res)=>{
-  res.render('add',{title:"add add页"})
-})
 router.get('/main',(req,res)=>{
   res.render('main',{title:"main页"})
 })
-router.get('/sanwen',(req,res)=>{
-  res.render('sanwen',{title:"main页"})
+router.get('/photo',(req,res)=>{
+  res.render('photo',{title:"main页"})
 })
 router.get('/shuoshuo',(req,res)=>{
   res.render('shuoshuo',{title:"main页"})
 })
 router.get('/mood',(req,res)=>{
   res.render('mood',{title:"main页"})
+})
+router.get('/addshuoshuo',(req,res)=>{
+  res.render('addshuoshuo',{title:"addshuoshuo"})
+})
+router.get('/addmoods',(req,res)=>{
+  res.render('addmoods',{title:"addmoods"})
 })
 module.exports = router;

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>照片墙</title>
+    <link rel="stylesheet" href="/css/commonse.css"">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <script src="/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/js/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
+    <script type="text/javascript" src="http://unpkg.com/iview/dist/iview.min.js"></script>
+    <style>
+        .fa-uploads {
+            width: 90%;
+            padding: 50px;
+        }
+        .txt{
+            width: 50%;
+            resize: none;
+        }
+    .demo-upload-list{
+        width: 160px;
+        height: 160px;
+        text-align: center;
+        line-height: 160px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        overflow: hidden;
+        background: #fff;
+        position: relative;
+        box-shadow: 0 1px 1px rgba(0,0,0,.2);
+        margin: 5px;
+    }
+    .demo-upload-list img{
+        width: 100%;
+        height: 100%;
+    }
+    .demo-upload-list-cover{
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,.6);
+    }
+    .demo-upload-list:hover .demo-upload-list-cover{
+        display: block;
+    }
+    .demo-upload-list-cover i{
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+        margin: 0 2px;
+    }
+    .upload{
+        padding-left: 50px;
+        display: flex;
+        flex-wrap: wrap;
+        width: 600px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="box" id="app">
+        <div class="fa-uploads">
+            <i-input v-model="value" type="textarea" :rows="4" placeholder="说点什么吧..." class="txt" />
+        </div>
+        <div class="upload">
+            <div class="demo-upload-list" v-for="item in uploadList">
+                <template v-if="item.status === 'finished'">
+                    <img :src="item.url">
+                    <div class="demo-upload-list-cover">
+                        <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
+                        <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+                    </div>
+                </template>
+                <template v-else>
+                    <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
+                </template>
+            </div>
+            <Upload ref="upload" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess"
+                :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize"
+                :before-upload="handleBeforeUpload" multiple type="drag" action="//jsonplaceholder.typicode.com/posts/"
+                style="display: inline-block;width:160px;
+                margin-bottom: 20px;">
+                <div style="width: 160px;height:160px;line-height: 160px;">
+                    <Icon type="ios-camera" size="20"></Icon>
+                </div>
+            </Upload>
+            <Modal title="预览大图" v-model="visible">
+                <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
+            </Modal>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            mounted() {
+                this.uploadList = this.$refs.upload.fileList;
+            },
+            data: {
+                visible: false,
+                columns1: [],
+                data1: [],
+                value: '',
+                defaultList: [{
+                        'name': 'a42bdcc1178e62b4694c830f028db5c0',
+                        'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
+                    },
+                    {
+                        'name': 'bc7521e033abdd1e92222d733590f104',
+                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
+                    },
+                    {
+                        'name': 'bc7521e033abdd1e92222d733590f104',
+                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
+                    }
+                    ,
+                    {
+                        'name': 'bc7521e033abdd1e92222d733590f104',
+                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
+                    }
+                    ,
+                    {
+                        'name': 'bc7521e033abdd1e92222d733590f104',
+                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
+                    }
+                    ,{
+                        'name': 'bc7521e033abdd1e92222d733590f104',
+                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
+                    }
+                ],
+                imgName: '',
+                visible: false,
+                uploadList: []
+            },
+            methods: {
+                show: function () {
+                    this.visible = true;
+                },
+                handleView(name) {
+                    this.imgName = name;
+                    this.visible = true;
+                },
+                handleRemove(file) {
+                    const fileList = this.$refs.upload.fileList;
+                    this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+                },
+                handleSuccess(res, file) {
+                    file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
+                    file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+                },
+                handleFormatError(file) {
+                    this.$Notice.warning({
+                        title: '图片格式错误',
+                        desc: '请上传 jpg or png.'
+                    });
+                },
+                handleMaxSize(file) {
+                    this.$Notice.warning({
+                        title: '图片大小限制',
+                        desc: '图片最大不能超过2M.'
+                    });
+                },
+                handleBeforeUpload() {
+                    const check = this.uploadList.length < 5;
+                    if (!check) {
+                        this.$Notice.warning({
+                            title: '最多只能上传五张图片.'
+                        });
+                    }
+                    return check;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

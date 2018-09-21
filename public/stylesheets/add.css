@@ -8,12 +8,7 @@
 }
 
 #app {
-    width: 500px;
-    height: 350px;
-    background: #fff;
-    position: absolute;
-    top: 200px;
-    left: 200px;
+ 
 }
 
 html,
@@ -32,7 +27,24 @@ a {
 .banner {
     width: 100%;
     height: 100%;
-    background-image: url(../images/seg.jpg);
-    position: relative;
-    min-width: 1200px;
+  
+}
+#editor{
+    background: #fff;
+    min-height: 300px;
+}
+.w-e-text-container{
+    min-height: 300px;
+}
+.fa-editor{
+    padding: 0px 100px 0 50px;
+}
+.input-fa{
+    padding: 100px 100px 20px 50px;
+}
+.put-fa{
+    padding: 0px 100px 20px 50px;
+}
+.fb-mood{
+    margin: 20px 0 0 50px;
 }

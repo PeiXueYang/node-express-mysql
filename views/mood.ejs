@@ -16,68 +16,122 @@
     <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
     <script type="text/javascript" src="http://unpkg.com/iview/dist/iview.min.js"></script>
     <style>
-
-    </style>
-    <style>
-
+        .box{
+            padding: 20px;
+        }
+        .table {
+            margin: 0px auto;
+            padding-left: 100px;
+        }
+        .fa-btn{
+            height: 50px;
+            padding-right: 140px;
+        }
+        .addmoods{
+          float: right;
+        }
+        table{
+            table-layout: fixed;
+            width: 90%;
+        }
+       th,td{
+            border: 1px solid lightgrey;
+            text-align: center;
+            height: 40px;
+            line-height: 40px;
+            width: 130px;
+        }
+        th{
+            background: #f8f8f9;
+        }
+        .cleft{
+            text-align: left; 
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            width: 500px; 
+        }
+        .w-header{
+            width: 200px;
+        }
+        .m-date{
+            width: 150px;
+        }
+        .inx{
+            width: 80px;
+        }
+      
     </style>
 </head>
 
 <body>
     <div class="box" id="app">
-            <i-table :columns="columns1" :data="data1"></i-table>
+        <div class="fa-btn">
+            <i-button type='primary' class="addmoods">添加心情</i-button>
+        </div>
+        <div class="table">
+            <table>
+                <tbody>
+                    <th class="inx">#</th>
+                    <th class="w-header">标题</th>
+                    <th>内容</th>
+                    <th>作者</th>
+                    <th class="m-date">心情发表时间</th>
+                    <th>详情</th>
+                </tbody>
+                <tbody>
+                    <tr v-for='(item,index) in data1'>
+                        <td class="inx">{{index+1}}</td>
+                        <td class="w-header">{{item.header}}</td>
+                        <td class="cleft">{{item.content}}</td>
+                        <td>{{item.author}}</td>
+                        <td class="m-date">{{item.date}}</td>
+                        <td>
+                            <a href="#">查看</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
     <script>
         new Vue({
             el: '#app',
             data: {
                 visible: false,
-                columns1: [
-                    {
-                        title: 'Name',
-                        key: 'name'
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age'
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address'
-                    }
-                ],
-                data1: [
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        date: '2016-10-03'
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        address: 'London No. 1 Lake Park',
-                        date: '2016-10-01'
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park',
-                        date: '2016-10-02'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park',
-                        date: '2016-10-04'
-                    }
-                ]
+                columns1: [],
+                data1: []
+            },
+            created() {
+                this.getList()
             },
             methods: {
-                show: function () {
-                    this.visible = true;
+                getList: function () {
+                    let _this = this
+                    let url = 'http://localhost:3000/am/getMlist'
+                    $.ajax({
+                        type: 'post',
+                        url,
+                        success: (res) => {
+                            _this.data1 = []
+                            if (0 == res.status) {
+                                console.log(res)
+                                _this.data1 = res.result
+                            } else {
+                                _this.$Notice.info({
+                                    desc: '暂无数据.'
+                                })
+                            }
+                        }
+                    })
                 }
             }
+        })
+    </script>
+    <script>
+        $('.addmoods').on('click', function () {
+            $(window.parent.document).find('#contentIframe').attr('src', 'addmoods')
         })
     </script>
 </body>
