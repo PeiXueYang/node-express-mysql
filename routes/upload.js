@@ -4,6 +4,7 @@ const fs = require('fs')
 var formidable = require('formidable')
 const uploadImg = '/uploadImg/'
 const domain = "http://localhost:3000";
+// const txt = require('../utils/test.json')
 // 图片上传 部分
 router.post('/upload', function (req, res) {
     var form = new formidable.IncomingForm(); //创建上传表单
@@ -26,7 +27,7 @@ router.post('/upload', function (req, res) {
                 extName = 'png';
                 break;
         }
-        console.log(res.locals, '图片路径.')
+        // console.log(res.locals, '图片路径.')
         if (extName.length == 0) {
             res.locals.error = '只支持png和jpg格式图片';
             res.send({
@@ -47,4 +48,7 @@ router.post('/upload', function (req, res) {
         });
     });
 });
+
+
+
 module.exports = router;
